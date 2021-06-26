@@ -14,12 +14,12 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	err_message(char *error)
+int	err_message(char *error)
 {
-	write(1, "Error!\n", 7);
+	write(1, "Error! ", 7);
 	write(1, error, ft_strlen(error));
 	write(1, "\n", 1);
-	exit(1);
+	return (0);
 }
 
 void	err_memory_allocation_error(void)
@@ -74,7 +74,7 @@ unsigned long long int	ovrloading_protection(
 
 int	ft_atoi(const char *str)
 {
-	size_t					i;
+	int					i;
 	int						sign;
 	unsigned long long int	number;
 
