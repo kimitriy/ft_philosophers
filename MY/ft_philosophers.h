@@ -9,26 +9,35 @@
 
 typedef struct	s_phlsphr
 {
-	//int				indx; //philosopher's index
-	int				pr; //priority 1 (high), 2 (middle), 3 (low)
-	int				lf_f; //left fork flag, 0 - fork is locked, 1 - fork is available
-	int				rf_f; //right fork flag, 0 - fork is locked, 1 - fork is available
-	pthread_mutex_t	*lf; //pointer to the left fork
-	pthread_mutex_t	*rf; //pointer to the right fork
-	unsigned long	l_ml_time; //time since start of the last meal
-	int				n_mls_h_eatn; //number of meals philosopher has eaten to the moment
-}					t_phlsphr;
+	int					indx; //philosopher's index
+	int					alive; //if alive == 1, dead == 0
+	int					pr; //priority 1 (high), 2 (middle), 3 (low)
+	int					*t2d; //points to t_prime->t2d
+	int					*t2e; //points to t_prime->t2e
+	int					*t2s; //points to t_prime->t2s
+	int					*lf_f; //left fork flag, 0 - fork is locked, 1 - fork is available
+	int					*rf_f; //right fork flag, 0 - fork is locked, 1 - fork is available
+	pthread_mutex_t		*lf_mtx; //pointer to the left fork
+	pthread_mutex_t		*rf_mtx; //pointer to the right fork
+	pthread_mutex_t		*p_mtx; //pointer to t_prime->print_mtx
+	unsigned long		t_strt; //start time
+	unsigned long		t_lst_ml; //time since start of the last meal
+	int					have_eatn; //number of meals philosopher has eaten to the moment
+}						t_phlsphr;
 
 typedef struct	s_prime
 {
-	int				n_ph; //number_of_philosophers
-	int				t2d; //time_to_die
-	int				t2e; //time_to_eat
-	int				t2s; //time_to_sleep
-	int				n_mls_m_eat; //number_of_times_each_philosopher_must_eat
-	pthread_mutex_t	*arr_mtx; //array of mutexes (forks)
-	t_phlsphr		*arr_ph; //array of philosophers
-}					t_prime;
+	int					n_ph; //number_of_philosophers
+	int					t2d; //time_to_die
+	int					t2e; //time_to_eat
+	int					t2s; //time_to_sleep
+	int					n_mls_m_eat; //number_of_times_each_philosopher_must_eat
+	int					*arr_ff; //array of fork flags
+	pthread_mutex_t		*arr_mtx; //array of mutexes (forks)
+	pthread_mutex_t		prnt_mtx; //mutex that is used to lock pthread while printing its status
+	t_phlsphr			*arr_ph; //array of philosophers
+	pthread_t			*ph_thread; //array of philosopher threads
+}						t_prime;
 
 /*utils.c*/
 void					ft_bzero(void *s, size_t n);
@@ -45,7 +54,21 @@ int						is_a_number(char *str);
 int						prs_argv(int argc, char **argv, t_prime *p);
 int						prsr(int argc, char **argv, t_prime *p);
 
+/*pthreads.c*/
+void					prnt_sts(t_phlsphr *ph, char *status);
+void					wait_for(int intrvl);
+int						check_frks(t_phlsphr *ph);
+void					get_frks(t_phlsphr *ph);
+void					ph_lives(t_phlsphr *ph);
+void					launch_threads(t_prime *p);
+
+/*monitor.c*/
+void					monitor(t_prime *p);
+
 /*main.c*/
+void					arr_mtx_init(t_prime *p);
+void					ph_init(t_prime *p, int ix);
+void					arr_ph_init(t_prime *p);
 int						main(int argc, char **argv);
 
 #endif
