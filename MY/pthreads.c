@@ -58,11 +58,15 @@ void	ph_lives(t_phlsphr *ph)
 	{
 		if (check_frks(ph) == 1)
 		{	
-			get_forks(ph);
+			get_frks(ph);
 			prnt_sts(ph, "is eating");
 			ph->t_lst_ml = current_time();
 			wait_for(*ph->t2e);
 			release_frks(ph);
+			ph->have_eatn++;
+			prnt_sts(ph, "is sleeping");
+			wait_for(*ph->t2s);
+			prnt_sts(ph, "is thinking");
 		}
 		else
 			wait_for(ph->pr);
