@@ -9,9 +9,12 @@
 
 typedef struct	s_phlsphr
 {
-	int				indx; //philosopher's index
-	pthread_mutex_t	*lfrk;
-	pthread_mutex_t	*rfrk;
+	//int				indx; //philosopher's index
+	int				pr; //priority 1 (high), 2 (middle), 3 (low)
+	int				lf_f; //left fork flag, 0 - fork is locked, 1 - fork is available
+	int				rf_f; //right fork flag, 0 - fork is locked, 1 - fork is available
+	pthread_mutex_t	*lf; //pointer to the left fork
+	pthread_mutex_t	*rf; //pointer to the right fork
 	unsigned long	l_ml_time; //time since start of the last meal
 	int				n_mls_h_eatn; //number of meals philosopher has eaten to the moment
 }					t_phlsphr;
@@ -23,6 +26,7 @@ typedef struct	s_prime
 	int				t2e; //time_to_eat
 	int				t2s; //time_to_sleep
 	int				n_mls_m_eat; //number_of_times_each_philosopher_must_eat
+	pthread_mutex_t	*arr_mtx; //array of mutexes (forks)
 	t_phlsphr		*arr_ph; //array of philosophers
 }					t_prime;
 
