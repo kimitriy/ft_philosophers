@@ -78,10 +78,12 @@ void	launch_threads(t_prime *p)
 	int	i;
 
 	i = 0;
-	pthread_create(p->ph_thread[i], NULL, (void *)monitor, p);
+	if (pthread_create(p->ph_thread[i], NULL, (void *)monitor, p))
+		err_message("Thread was not created");
 	while (i < p->n_ph)
 	{
-		pthread_create(p->ph_thread[i], NULL, (void *)ph_lives, &p->arr_ph[i]);
+		if (pthread_create(p->ph_thread[i], NULL, (void *)ph_lives, &p->arr_ph[i]))
+			err_message("Thread was not created");
 		i++;
 	}
 	

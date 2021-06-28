@@ -1,16 +1,19 @@
 #include "ft_philosophers.h"
 
-void	arr_mtx_init(t_prime *p)
+void	mtx_init(t_prime *p)
 {
 	int		i;
 
 	i = 0;
 	while (i < p->n_ph)
 	{
-		if (pthread_mutex_init(&p->arr_mtx[i], NULL))
+		if (pthread_mutex_init(&p->arr_mtx[i], NULL)) //initializes mutex
 			err_message("Mutex was not initialised");
+		p->arr_ff[i] = 1; //sets fork (mutex) as available (unlocked)
 		i++;
-	}	
+	}
+	if (pthread_mutex_init(&p->prnt_mtx, NULL))
+		err_message("Mutex was not initialised");
 }
 
 void	ph_init(t_prime *p, int ix)
@@ -23,15 +26,15 @@ void	ph_init(t_prime *p, int ix)
 	p->arr_ph[ix].t2s = &p->t2s;
 	p->arr_ph[ix].lf_mtx = &p->arr_mtx[ix]; //assigns address of arr_mtx[ix] as the left fork mutex
 	p->arr_ph[ix].lf_f = &p->arr_ff[ix]; //assigns address of arr_ff[ix] as the left fork's status (0 or 1)
-	if (ix + 1 == p->n_ph) //assigns address of arr_mtx[ix] as the right fork mutex
+	if (ix + 1 == p->n_ph) //for the last philosopher
 	{
-		p->arr_ph[ix].rf_mtx = &p->arr_mtx[0]; //for the last ph right fork is the same as left fork for the first ph
-		p->arr_ph[ix].lf_f = &p->arr_ff[0];
+		p->arr_ph[ix].rf_mtx = &p->arr_mtx[0]; //the right fork is the same as left fork for the first ph
+		p->arr_ph[ix].rf_f = &p->arr_ff[0]; //assigns address of arr_ff[0] as the left fork's status (0 or 1)
 	}
-	else
+	else //for all rest philosophers
 	{
 		p->arr_ph[ix].rf_mtx = &p->arr_mtx[ix + 1];
-		p->arr_ph[ix].lf_f = &p->arr_ff[ix + 1];
+		p->arr_ph[ix].rf_f = &p->arr_ff[ix + 1];
 	}
 	p->arr_ph[ix].p_mtx = &p->prnt_mtx; //set the address of prnt_mtx to p_mtx pointer of each philosopher
 	p->arr_ph[ix].t_lst_ml; //sets time of last meal as equal to time of start

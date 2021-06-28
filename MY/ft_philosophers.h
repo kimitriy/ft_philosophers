@@ -25,6 +25,12 @@ typedef struct	s_phlsphr
 	int					have_eatn; //number of meals philosopher has eaten to the moment
 }						t_phlsphr;
 
+typedef	struct	s_mntr
+{
+	int					*pr; //arr where the monitor assigns priority level to each phi
+	int					*n_mls_ate; //arr where the monitor saves how many time each phi ate
+}						t_mntr;
+
 typedef struct	s_prime
 {
 	int					n_ph; //number_of_philosophers
@@ -63,10 +69,11 @@ void					ph_lives(t_phlsphr *ph);
 void					launch_threads(t_prime *p);
 
 /*monitor.c*/
+
 void					monitor(t_prime *p);
 
 /*main.c*/
-void					arr_mtx_init(t_prime *p);
+void					mtx_init(t_prime *p);
 void					ph_init(t_prime *p, int ix);
 void					arr_ph_init(t_prime *p);
 int						main(int argc, char **argv);

@@ -2,5 +2,8 @@
 
 void	monitor(t_prime *p)
 {
-
+	while (1)
+	{
+		
+	}
 }
