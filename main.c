@@ -1,65 +1,96 @@
-#include "includes/philo.h"
+#include "ft_philosophers.h"
 
-static void	mutex_init(int i, t_all_for_philo *var)
+void	mtx_init(t_prime *p)
 {
-	while (++i < var->num)
+	int		i;
+
+	i = 0;
+	while (i < p->n_ph)
 	{
-		if (pthread_mutex_init(&var->fork[i], NULL))
-			print_error("Mutex was not inited\n");
+		if (pthread_mutex_init(&p->arr_mtx[i], NULL)) //initializes mutex
+			err_message("Mutex was not initialised");
+		p->arr_ff[i] = 1; //sets fork (mutex) as available (unlocked)
+		i++;
 	}
-	if (pthread_mutex_init(&var->msg, NULL))
-		print_error("Mutex was not inited\n");
+	if (pthread_mutex_init(&p->prnt_mtx, NULL))
+		err_message("Mutex was not initialised");
 }
 
-static void	init_philo(t_one_of_philo *philo, int i, t_all_for_philo var)
+void	ph_init(t_prime *p, int ix)
 {
-	philo->index = i;
-	philo->info = &var;
-	philo->last_eat = var.time_of_start;
-	philo->right_fork = &var.fork[i];
-	if (i == 0)
-		philo->left_fork = &var.fork[var.num - 1];
-	else
-		philo->left_fork = &var.fork[i - 1];
-	if (pthread_create(&var.thread[i], NULL, (void *)live_life, philo))
-		print_error("Thread was not created\n");
-	usleep(100);
-	pthread_detach(var.thread[i]);
+	p->arr_ph[ix].indx = ix;
+	p->arr_ph[ix].alive = 1;
+	p->arr_ph[ix].pr = &p->mntr.pr[ix]; //points to pr array in t_mntr struct
+	p->arr_ph[ix].t2d = &p->t2d;
+	p->arr_ph[ix].t2e = &p->t2e;
+	p->arr_ph[ix].t2s = &p->t2s;
+	p->arr_ph[ix].lf_mtx = &p->arr_mtx[ix]; //assigns address of arr_mtx[ix] as the left fork mutex
+	p->arr_ph[ix].lf_f = &p->arr_ff[ix]; //assigns address of arr_ff[ix] as the left fork's status (0 or 1)
+	if (ix + 1 == p->n_ph) //for the last philosopher
+	{
+		p->arr_ph[ix].rf_mtx = &p->arr_mtx[0]; //the right fork is the same as left fork for the first ph
+		p->arr_ph[ix].rf_f = &p->arr_ff[0]; //assigns address of arr_ff[0] as the left fork's status (0 or 1)
+	}
+	else //for all rest philosophers
+	{
+		p->arr_ph[ix].rf_mtx = &p->arr_mtx[ix + 1];
+		p->arr_ph[ix].rf_f = &p->arr_ff[ix + 1];
+	}
+	p->arr_ph[ix].p_mtx = &p->prnt_mtx; //set the address of prnt_mtx to p_mtx pointer of each philosopher
+	p->arr_ph[ix].t_lst_ml; //sets time of last meal as equal to time of start
+	p->arr_ph[ix].have_eatn = 0;
 }
 
-static void	free_all(int i, t_one_of_philo *philo, t_all_for_philo *var)
+void	arr_ph_init(t_prime *p)
 {
-	while (--i >= 0)
-		pthread_mutex_destroy(&var->fork[i]);
-	pthread_mutex_destroy(&var->msg);
-	free(var->thread);
-	free(var->fork);
-	free(philo);
+	int		ix; //ph index
+
+	ix = 0;
+	while (ix < p->n_ph)
+	{
+		ph_init(p, ix);
+		ix++;
+	}
+}
+
+void	mntr_init(t_prime *p)
+{
+	int	i;
+
+	p->mntr.h = 1;
+	p->mntr.m = 2;
+	p->mntr.l = 3;
+	i = 0;
+	while (i < p->n_ph)
+	{
+		p->mntr.pr[i] = p->mntr.h;
+		p->mntr.n_mls_ate[i] = 0;
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
 {
-	t_all_for_philo	var;
-	t_one_of_philo	*philo;
-	pthread_t		tid;
-	int				i;
+	t_prime	*p;
 
-	if (!(check_arguments(argc, argv, &var)))
+	p = (t_prime *)ft_calloc(1, sizeof(t_prime));
+	if (prsr(argc, argv, p))
 	{
-		var.thread = (pthread_t *)malloc(sizeof(pthread_t) * var.num);
-		var.fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * var.num);
-		philo = (t_one_of_philo *)malloc(sizeof(t_one_of_philo) * var.num);
-		i = -1;
-		mutex_init(i, &var);
-		var.time_of_start = current_time();
-		var.fi = philo;
-		i = -1;
-		while (++i < var.num)
-			init_philo(&philo[i], i, var);
-		if (pthread_create(&tid, NULL, (void *)death_note, (void *)&var))
-			print_error("Thread was not created\n");
-		pthread_join(tid, NULL);
-		free_all(i, philo, &var);
+		write(1, "args are OK!\n", 13);
+		arr_mtx_init(p);
+		arr_ph_init(p);
+		mntr_init(p);
+		launch_threads(p);
 	}
+	else
+	{
+		write(1, "args are not OK!\n", 17);
+		exit (1);
+	}
+	while (1)
+	{
+		
+	}
+	
 	return (0);
 }

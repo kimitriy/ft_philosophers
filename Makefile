@@ -1,22 +1,46 @@
-NAME = philo
-FLAGS = -Wall -Wextra -Werror
-SRC = main.c	eat_or_die.c	check.c
-OBJS = $(SRC:.c=.o)
-HEADER = includes
-.PHONY: all clean fclean re
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rburton <rburton@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/09/28 11:32:38 by rburton           #+#    #+#              #
+#    Updated: 2021/06/27 17:11:52 by rburton          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-all: $(NAME)
-	
-$(NAME): 	$(OBJS)
-			gcc $(FLAGS) -I $(HEADER) $(OBJS) -o $(NAME) 
+NAME		= phlsphrs
 
-%.o: %.c $(HEADER)
-	gcc $(FLAGS) -I $(HEADER) -o $@ -c $<
+HEADER		= ft_philosophers.h
+
+SRC 		= 	main.c \
+				prsr.c \
+				utils.c \
+				pthreads.c \
+				monitor.c \
+
+OBJS		= ${SRC:.c=.o}
+
+GCC			= gcc
+
+CFLAGS		= -g -pthread -Wall -Wextra -Werror
+
+RM			= rm -f
+
+all:		${NAME}
+
+.c.o:		
+				${GCC} ${CFLAGS} -c $< -o ${<:.c=.o}
+
+${NAME}:		${OBJS} ${HEADER}
+				${GCC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean:
-	rm -f $(OBJS)
-	
-fclean: clean
-	rm -f $(NAME)
+		${RM} ${OBJS}
 
-re: fclean all
+fclean:	clean
+		${RM} ${NAME}
+		${RM} ${LIB}
+
+re:		fclean all
