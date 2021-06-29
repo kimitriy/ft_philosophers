@@ -20,7 +20,7 @@ void	ph_init(t_prime *p, int ix)
 {
 	p->arr_ph[ix].indx = ix;
 	p->arr_ph[ix].alive = 1;
-	p->arr_ph[ix].pr = 1; //sets initial priority equal to the highest level
+	p->arr_ph[ix].pr = &p->mntr.pr[ix]; //points to pr array in t_mntr struct
 	p->arr_ph[ix].t2d = &p->t2d;
 	p->arr_ph[ix].t2e = &p->t2e;
 	p->arr_ph[ix].t2s = &p->t2s;
@@ -53,6 +53,22 @@ void	arr_ph_init(t_prime *p)
 	}
 }
 
+void	mntr_init(t_prime *p)
+{
+	int	i;
+
+	p->mntr.h = 1;
+	p->mntr.m = 2;
+	p->mntr.l = 3;
+	i = 0;
+	while (i < p->n_ph)
+	{
+		p->mntr.pr[i] = p->mntr.h;
+		p->mntr.n_mls_ate[i] = 0;
+		i++;
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_prime	*p;
@@ -63,6 +79,7 @@ int	main(int argc, char **argv)
 		write(1, "args are OK!\n", 13);
 		arr_mtx_init(p);
 		arr_ph_init(p);
+		mntr_init(p);
 		launch_threads(p);
 	}
 	else

@@ -11,7 +11,7 @@ typedef struct	s_phlsphr
 {
 	int					indx; //philosopher's index
 	int					alive; //if alive == 1, dead == 0
-	int					pr; //priority 1 (high), 2 (middle), 3 (low)
+	int					*pr; //priority 1 (high), 2 (middle), 3 (low)
 	int					*t2d; //points to t_prime->t2d
 	int					*t2e; //points to t_prime->t2e
 	int					*t2s; //points to t_prime->t2s
@@ -27,6 +27,9 @@ typedef struct	s_phlsphr
 
 typedef	struct	s_mntr
 {
+	int					h;
+	int					m;
+	int					l;
 	int					*pr; //arr where the monitor assigns priority level to each phi
 	int					*n_mls_ate; //arr where the monitor saves how many time each phi ate
 }						t_mntr;
@@ -41,8 +44,9 @@ typedef struct	s_prime
 	int					*arr_ff; //array of fork flags
 	pthread_mutex_t		*arr_mtx; //array of mutexes (forks)
 	pthread_mutex_t		prnt_mtx; //mutex that is used to lock pthread while printing its status
-	t_phlsphr			*arr_ph; //array of philosophers
 	pthread_t			*ph_thread; //array of philosopher threads
+	t_phlsphr			*arr_ph; //array of philosophers
+	t_mntr				mntr; //
 }						t_prime;
 
 /*utils.c*/

@@ -8,7 +8,7 @@ void	prnt_sts(t_phlsphr *ph, char *status)
 	t_stmp = current_time() - ph->t_strt;
 	pthread_mutex_lock(ph->p_mtx);
 	printf("%lu %d %s\n", t_stmp, ph->indx, status);
-	if (!ph->alive)
+	if (ph->alive)
 		pthread_mutex_unlock(ph->p_mtx);
 }
 
@@ -51,6 +51,12 @@ void	release_frks(t_phlsphr *ph)
 	ph->rf_f = 1;
 }
 
+void	still_alive(t_phlsphr *ph)
+{
+	if (*ph->t2d <= (cuurent_time() - ph->t_lst_ml))
+		ph->alive = 0;
+}
+
 void	ph_lives(t_phlsphr *ph)
 {
 	ph->t_strt = current_time();
@@ -59,17 +65,18 @@ void	ph_lives(t_phlsphr *ph)
 		if (check_frks(ph) == 1)
 		{	
 			get_frks(ph);
-			prnt_sts(ph, "is eating");
 			ph->t_lst_ml = current_time();
+			ph->have_eatn++;
+			prnt_sts(ph, "is eating");
 			wait_for(*ph->t2e);
 			release_frks(ph);
-			ph->have_eatn++;
 			prnt_sts(ph, "is sleeping");
 			wait_for(*ph->t2s);
 			prnt_sts(ph, "is thinking");
 		}
 		else
 			wait_for(ph->pr);
+		still_alive(ph);
 	}
 }
 
