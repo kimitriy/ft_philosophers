@@ -42,6 +42,7 @@ int		check_frks(t_phlsphr *ph)
 
 void	get_frks(t_phlsphr *ph)
 {
+	write(1, "qqq\n", 4);
 	pthread_mutex_lock(ph->lf_mtx);
 	pthread_mutex_lock(ph->rf_mtx);
 	ph->lf_f = 0;
@@ -66,14 +67,21 @@ void	still_alive(t_phlsphr *ph)
 
 void	ph_lives(t_phlsphr *ph)
 {
+	// write(1, "ph_lives is launched\n", 21);
+	
 	ph->t_strt = current_time();
+	ph->t_lst_ml = ph->t_strt;
 	while (1)
 	{
 		if (check_frks(ph) == 1)
 		{	
 			get_frks(ph);
+			
 			ph->t_lst_ml = current_time();
 			ph->have_eatn++;
+			
+			ft_putnbr(ph->have_eatn);
+			write(1, "\n", 1);
 			prnt_sts(ph, "is eating");
 			wait_for(*ph->t2e);
 			release_frks(ph);
@@ -89,12 +97,13 @@ void	ph_lives(t_phlsphr *ph)
 
 void	launch_threads(t_prime *p)
 {
-	int	i;
+	int			i;
+	pthread_t	mntr_tid;
 
-	p->ph_thread = (pthread_t *)malloc(p->n_ph * sizeof(pthread_t));
-	i = 0;
-	if (pthread_create(&p->ph_thread[i], NULL, (void *)monitor, p))
+	if (pthread_create(&mntr_tid, NULL, (void *)monitor, p))
 		err_message("Thread was not created");
+	p->ph_thread = (pthread_t *)ft_calloc(p->n_ph, sizeof(pthread_t));
+	i = 0;
 	while (i < p->n_ph)
 	{
 		if (pthread_create(&p->ph_thread[i], NULL, (void *)ph_lives, &p->arr_ph[i]))

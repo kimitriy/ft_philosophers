@@ -20,8 +20,8 @@ typedef struct	s_phlsphr
 	pthread_mutex_t		*lf_mtx; //pointer to the left fork
 	pthread_mutex_t		*rf_mtx; //pointer to the right fork
 	pthread_mutex_t		*p_mtx; //pointer to t_prime->print_mtx
-	unsigned long		t_strt; //start time
 	unsigned long		t_lst_ml; //time since start of the last meal
+	unsigned long		t_strt; //start time
 	int					have_eatn; //number of meals philosopher has eaten to the moment
 }						t_phlsphr;
 
@@ -33,6 +33,7 @@ typedef	struct	s_mntr
 	int					ch_pr_f; //change_priority flag: 0 - the flag is off, 1 - the flag is on
 	int					*pr; //arr where the monitor assigns priority level to each phi
 	int					*n_mls_ate; //arr where the monitor saves how many time each phi ate
+	unsigned long		t_strt; //start time
 }						t_mntr;
 
 typedef struct	s_prime
@@ -59,6 +60,7 @@ int						ft_strlen(const char *s);
 int						ft_isdigit(int c);
 unsigned long long int	ovrloading_protection(unsigned long long int n, int sign);
 int						ft_atoi(const char *str);
+void					ft_putnbr(int n);
 
 /*prsr.c*/
 int						is_a_number(char *str);
@@ -66,6 +68,7 @@ int						prs_argv(int argc, char **argv, t_prime *p);
 int						prsr(int argc, char **argv, t_prime *p);
 
 /*pthreads.c*/
+unsigned long			current_time(void);
 void					prnt_sts(t_phlsphr *ph, char *status);
 void					wait_for(int intrvl);
 int						check_frks(t_phlsphr *ph);
@@ -74,7 +77,10 @@ void					ph_lives(t_phlsphr *ph);
 void					launch_threads(t_prime *p);
 
 /*monitor.c*/
-
+void					change_priority(t_prime *p);
+void					priority_node(t_prime *p);
+void					kill_ph(t_prime *p);
+void					is_dead(t_prime *p);
 void					monitor(t_prime *p);
 
 /*main.c*/

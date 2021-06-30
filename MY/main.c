@@ -4,8 +4,8 @@ void	mtx_init(t_prime *p)
 {
 	int		i;
 
-	p->arr_mtx = (pthread_mutex_t *)malloc(p->n_ph * sizeof(pthread_mutex_t));
-	p->arr_ff = (int *)malloc(p->n_ph * sizeof(int));
+	p->arr_mtx = (pthread_mutex_t *)ft_calloc(p->n_ph, sizeof(pthread_mutex_t));
+	p->arr_ff = (int *)ft_calloc(p->n_ph, sizeof(int));
 	i = 0;
 	while (i < p->n_ph)
 	{
@@ -39,7 +39,6 @@ void	ph_init(t_prime *p, int ix)
 		p->arr_ph[ix].rf_f = &p->arr_ff[ix + 1];
 	}
 	p->arr_ph[ix].p_mtx = &p->prnt_mtx; //set the address of prnt_mtx to p_mtx pointer of each philosopher
-	p->arr_ph[ix].t_lst_ml = p->arr_ph[ix].t_strt; //sets time of last meal as equal to time of start
 	p->arr_ph[ix].have_eatn = 0;
 }
 
@@ -47,7 +46,7 @@ void	arr_ph_init(t_prime *p)
 {
 	int		ix; //ph index
 
-	p->arr_ph = (t_phlsphr *)malloc(p->n_ph * sizeof(t_phlsphr));
+	p->arr_ph = (t_phlsphr *)ft_calloc(p->n_ph, sizeof(t_phlsphr));
 	ix = 0;
 	while (ix < p->n_ph)
 	{
@@ -60,12 +59,12 @@ void	mntr_init(t_prime *p)
 {
 	int	i;
 
-	p->mntr.h = 1;
-	p->mntr.m = 2;
-	p->mntr.l = 3;
+	p->mntr.h = 10;
+	p->mntr.m = 20;
+	p->mntr.l = 30;
 	p->mntr.ch_pr_f = 0;
-	p->mntr.pr = (int *)malloc(p->n_ph * sizeof(int));
-	p->mntr.n_mls_ate = (int *)malloc(p->n_ph * sizeof(int));
+	p->mntr.pr = (int *)ft_calloc(p->n_ph, sizeof(int));
+	p->mntr.n_mls_ate = (int *)ft_calloc(p->n_ph, sizeof(int));
 	i = 0;
 	while (i < p->n_ph)
 	{
@@ -79,7 +78,7 @@ int	main(int argc, char **argv)
 {
 	t_prime	*p;
 
-	p = (t_prime *)malloc(1 * sizeof(t_prime));
+	p = (t_prime *)ft_calloc(1, sizeof(t_prime));
 	if (prsr(argc, argv, p))
 	{
 		write(1, "args are OK!\n", 13);
