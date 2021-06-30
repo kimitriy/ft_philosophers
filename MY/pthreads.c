@@ -1,9 +1,16 @@
 #include "ft_philosophers.h"
 
+unsigned long	current_time(void)
+{
+	static struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
 void	prnt_sts(t_phlsphr *ph, char *status)
 {
 	unsigned long	t_stmp;
-	pthread_mutex_t	prnt;
 
 	t_stmp = current_time() - ph->t_strt;
 	pthread_mutex_lock(ph->p_mtx);
@@ -27,7 +34,7 @@ void	wait_for(int intrvl)
 
 int		check_frks(t_phlsphr *ph)
 {
-	if (ph->lf_f == 1 && ph->rf_f == 1)
+	if (*ph->lf_f == 1 && *ph->rf_f == 1)
 		return (1);
 	else
 		return (0);
@@ -47,13 +54,13 @@ void	release_frks(t_phlsphr *ph)
 {
 	pthread_mutex_unlock(ph->lf_mtx);
 	pthread_mutex_unlock(ph->rf_mtx);
-	ph->lf_f = 1;
-	ph->rf_f = 1;
+	*ph->lf_f = 1;
+	*ph->rf_f = 1;
 }
 
 void	still_alive(t_phlsphr *ph)
 {
-	if (*ph->t2d <= (cuurent_time() - ph->t_lst_ml))
+	if (*ph->t2d <= (int)(current_time() - ph->t_lst_ml))
 		ph->alive = 0;
 }
 
@@ -75,7 +82,7 @@ void	ph_lives(t_phlsphr *ph)
 			prnt_sts(ph, "is thinking");
 		}
 		else
-			wait_for(ph->pr);
+			wait_for(*ph->pr);
 		still_alive(ph);
 	}
 }
@@ -84,14 +91,14 @@ void	launch_threads(t_prime *p)
 {
 	int	i;
 
+	p->ph_thread = (pthread_t *)malloc(p->n_ph * sizeof(pthread_t));
 	i = 0;
-	if (pthread_create(p->ph_thread[i], NULL, (void *)monitor, p))
+	if (pthread_create(&p->ph_thread[i], NULL, (void *)monitor, p))
 		err_message("Thread was not created");
 	while (i < p->n_ph)
 	{
-		if (pthread_create(p->ph_thread[i], NULL, (void *)ph_lives, &p->arr_ph[i]))
+		if (pthread_create(&p->ph_thread[i], NULL, (void *)ph_lives, &p->arr_ph[i]))
 			err_message("Thread was not created");
 		i++;
 	}
-	
 }

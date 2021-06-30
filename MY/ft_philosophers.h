@@ -27,9 +27,10 @@ typedef struct	s_phlsphr
 
 typedef	struct	s_mntr
 {
-	int					h;
-	int					m;
-	int					l;
+	int					h; //high level
+	int					m; //middle level uses only if n_ph is an odd number
+	int					l; //low level
+	int					ch_pr_f; //change_priority flag: 0 - the flag is off, 1 - the flag is on
 	int					*pr; //arr where the monitor assigns priority level to each phi
 	int					*n_mls_ate; //arr where the monitor saves how many time each phi ate
 }						t_mntr;
