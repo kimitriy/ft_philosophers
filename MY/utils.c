@@ -121,3 +121,18 @@ void	ft_putnbr(int n)
 		write(1, &ch, 1);
 	}
 }
+
+int		arr_min(int *arr)
+{
+	int	rv;
+	int	i;
+
+	i = 0;
+	rv = arr[i];
+	while (arr[++i])
+	{
+		if (arr[i] < rv)
+			rv = arr[i];
+	}
+	return (rv);
+}
