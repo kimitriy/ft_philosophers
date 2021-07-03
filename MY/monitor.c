@@ -43,59 +43,13 @@ void	kill_ph(t_prime *p)
 	}
 }
 
-// void	is_dead(t_prime *p)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < p->n_ph)
-// 	{
-// 		if (p->arr_ph[i].alive == 0)
-// 		{
-// 			// write(1, "mmm\n", 4);
-// 			prnt_sts(&p->arr_ph[i], "died of hunger");
-// 			kill_ph(p);
-// 			// exit (0);
-// 			break ;
-// 		}
-// 		i++;
-// 	}
-// 	return ;
-// }
-
-void	priority_node(t_prime *p)
+void	is_dead(t_prime *p)
 {
 	int	i;
 
 	i = 0;
 	while (i < p->n_ph)
 	{
-		if (p->arr_ph[i].has_eatn > p->mntr.n_mls_ate[i])
-		{
-			p->mntr.ch_pr_f = 1; //sets change priority flag equal 1
-			p->mntr.n_mls_ate[i] = p->arr_ph[i].has_eatn;
-			if (p->mntr.n_mls_ate[i] > p->mntr.meals2moment)
-				p->mntr.meals2moment = p->mntr.n_mls_ate[i];
-			if (p->n_ph % 2 == 0)
-				*p->arr_ph[i].pr = p->mntr.m;
-			else
-				*p->arr_ph[i].pr = p->mntr.l;
-		}
-		i++;
-	}
-	if (p->mntr.ch_pr_f == 1)
-		change_priority(p);
-}
-
-void	priority_node(t_prime *p)
-{
-	int	i;
-
-	i = 0;
-	while (i < p->n_ph)
-	{
-		if (p->t2d - p->arr_ph[i].age < 50)
-			p->arr_ph[i].pr = p->mntr.h;
 		if (p->arr_ph[i].alive == 0)
 		{
 			prnt_sts(&p->arr_ph[i], "died of hunger");
@@ -106,6 +60,29 @@ void	priority_node(t_prime *p)
 	}
 	return ;
 }
+
+// void	priority_node(t_prime *p)
+// {
+// 	int	min;
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < p->n_ph)
+// 	{
+// 		min = arr_min(p->mntr.arr_has_etn);
+// 		if (p->mntr.arr_has_etn[i] <= min)
+// 			p->arr_ph[i].pr = p->mntr.h;
+// 		else if (p->mntr.arr_has_etn[i] > min)
+// 			p->arr_ph[i].pr = p->mntr.l;
+// 		if (p->arr_ph[i].alive == 0)
+// 		{
+// 			prnt_sts(&p->arr_ph[i], "died of hunger");
+// 			kill_ph(p);
+// 			break ;
+// 		}
+// 		i++;
+// 	}
+// }
 
 // void	priority_node(t_prime *p)
 // {
@@ -130,11 +107,11 @@ void	priority_node(t_prime *p)
 void	monitor(t_prime *p)
 {
 	// write(1, "mmm\n", 4);
-	p->mntr.t_strt = current_time();
+	// p->mntr.t_strt = current_time();
 	while (1)
 	{
-		priority_node(p);
-		// is_dead(p); //!!!
+		// priority_node(p);
+		is_dead(p); //!!!
 	}
 	return ;
 }
