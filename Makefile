@@ -22,7 +22,7 @@ SRC 		= 	main.c \
 
 OBJS		= ${SRC:.c=.o}
 
-CC			= gcc
+GCC			= gcc
 
 CFLAGS		= -g -pthread -Wall -Wextra -Werror
 
@@ -30,11 +30,11 @@ RM			= rm -f
 
 all:		${NAME}
 
-# .c.o:		
-# ${GCC} ${CFLAGS} -c $< -o ${<:.c=.o}
+.c.o:		
+				${GCC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:		${OBJS} ${HEADER}
-				${CC} ${CFLAGS} -o ${NAME} ${OBJS}
+				${GCC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean:
 		${RM} ${OBJS}

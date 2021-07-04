@@ -21,15 +21,15 @@ int	prs_argv(int argc, char **argv, t_prime *p)
 	else
 		return (0);
 	if (is_a_number(argv[2]))
-		p->t2d = ft_atoi(argv[2]);
+		p->t2d = ft_atoi(argv[2]) * 1000;
 	else
 		return (0);
 	if (is_a_number(argv[3]))
-		p->t2e = ft_atoi(argv[3]);
+		p->t2e = ft_atoi(argv[3]) * 1000;
 	else
 		return (0);
 	if (is_a_number(argv[4]))
-		p->t2s = ft_atoi(argv[4]);
+		p->t2s = ft_atoi(argv[4]) * 1000;
 	else
 		return (0);
 	if (argc == 5)
@@ -47,7 +47,7 @@ int	prsr(int argc, char **argv, t_prime *p)
 		return (err_message("Wrong number of arguments!"));
 	if (!prs_argv(argc, argv, p))
 		return (0);
-	if (p->n_ph > 200 || p->n_ph < 1)
+	if (p->n_ph > 2000 || p->n_ph < 1)
 		return (err_message("Wrong number of philosophers!"));
 	if (p->t2d < 60 || p->t2e < 60 || p->t2s < 60)
 		return (err_message("Wrong time_to_die / time_to_eat / time_to_sleep!"));
