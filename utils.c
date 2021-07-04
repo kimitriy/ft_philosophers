@@ -98,3 +98,41 @@ int	ft_atoi(const char *str)
 	number = ovrloading_protection(number, sign);
 	return (sign * (int)number);
 }
+
+void	ft_putnbr(unsigned int n)
+{
+	char	ch;
+	
+	// if (n == -2147483648)
+	// 	write(1, "-2147483648", 11);
+	// else if (n < 0)
+	// {
+	// 	write(1, "-", 1);
+	// 	ft_putnbr(n * (-1));
+	// }
+	if (n > 9)
+	{
+		ft_putnbr(n / 10);
+		ft_putnbr(n % 10);
+	}
+	else
+	{	
+		ch = n + '0';
+		write(1, &ch, 1);
+	}
+}
+
+int		arr_min(int *arr)
+{
+	int	rv;
+	int	i;
+
+	i = 0;
+	rv = arr[i];
+	while (arr[++i])
+	{
+		if (arr[i] < rv)
+			rv = arr[i];
+	}
+	return (rv);
+}

@@ -6,11 +6,11 @@
 #    By: rburton <rburton@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/28 11:32:38 by rburton           #+#    #+#              #
-#    Updated: 2021/06/27 17:11:52 by rburton          ###   ########.fr        #
+#    Updated: 2021/06/30 04:11:17 by rburton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= phlsphrs
+NAME		= philo
 
 HEADER		= ft_philosophers.h
 
@@ -22,7 +22,7 @@ SRC 		= 	main.c \
 
 OBJS		= ${SRC:.c=.o}
 
-GCC			= gcc
+CC			= gcc
 
 CFLAGS		= -g -pthread -Wall -Wextra -Werror
 
@@ -30,11 +30,11 @@ RM			= rm -f
 
 all:		${NAME}
 
-.c.o:		
-				${GCC} ${CFLAGS} -c $< -o ${<:.c=.o}
+# .c.o:		
+# ${GCC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:		${OBJS} ${HEADER}
-				${GCC} ${CFLAGS} -o ${NAME} ${OBJS}
+				${CC} ${CFLAGS} -o ${NAME} ${OBJS}
 
 clean:
 		${RM} ${OBJS}

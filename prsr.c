@@ -49,7 +49,7 @@ int	prsr(int argc, char **argv, t_prime *p)
 		return (0);
 	if (p->n_ph > 200 || p->n_ph < 1)
 		return (err_message("Wrong number of philosophers!"));
-	if (p->t2d < 120 || p->t2e < 60 || p->t2s < 60)
+	if (p->t2d < 60 || p->t2e < 60 || p->t2s < 60)
 		return (err_message("Wrong time_to_die / time_to_eat / time_to_sleep!"));
 	return (1);
 }
