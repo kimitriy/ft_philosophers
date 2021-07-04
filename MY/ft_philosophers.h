@@ -75,8 +75,8 @@ int						ft_strlen(const char *s);
 int						ft_isdigit(int c);
 unsigned long long int	ovrloading_protection(unsigned long long int n, int sign);
 int						ft_atoi(const char *str);
-void					ft_putnbr(int n);
-int						arr_min(int *arr);
+void					ft_putnbr(unsigned int n);
+// int						arr_min(int *arr);
 
 /*prsr.c*/
 int						is_a_number(char *str);
@@ -88,8 +88,8 @@ unsigned long			current_time(void);
 void					prnt_sts(t_phlsphr *ph, char *status);
 void					wait_for(int intrvl);
 // int						check_frks(t_phlsphr *ph);
-int						get_frks(t_phlsphr *ph);
-void					ph_lives(t_phlsphr *ph);
+void					get_frks(t_phlsphr *ph);
+void					*ph_lives(void *ph);
 void					launch_threads(t_prime *p);
 
 /*monitor.c*/
