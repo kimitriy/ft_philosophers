@@ -105,4 +105,6 @@ void					ph_init(t_prime *p, int ix);
 void					arr_ph_init(t_prime *p);
 int						main(int argc, char **argv);
 
+//hello world
+
 #endif
