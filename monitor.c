@@ -3,7 +3,7 @@
 void	kill_ph(t_prime *p)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < p->n_ph)
 	{
@@ -19,9 +19,9 @@ int	is_dead(t_prime *p)
 	i = 0;
 	while (i < p->n_ph)
 	{
-		if ((int)(current_time() - p->arr_ph[i].t_lst_ml) > p->t2d)
+		if ((current_time() - p->arr_ph[i].t_lst_ml) \
+			* 1000 > (unsigned long)p->t2d)
 		{
-			p->arr_ph[i].alive = 0;
 			prnt_sts(&p->arr_ph[i], "died of hunger");
 			kill_ph(p);
 			return (1);
@@ -31,12 +31,47 @@ int	is_dead(t_prime *p)
 	return (0);
 }
 
+int	is_fed(t_prime *p)
+{
+	int	n_ph_fed;
+	int	i;
+
+	n_ph_fed = 0;
+	i = 0;
+	while (i < p->n_ph)
+	{
+		if (p->arr_ph[i].has_eatn >= p->n_mls_m_eat)
+			n_ph_fed++;
+		i++;
+	}
+	if (n_ph_fed == p->n_ph)
+		return (1);
+	else
+		return (0);
+}
+
+/*
+void	print_n_of_meals(t_prime *p)
+{
+	int		i;
+
+	i = 0;
+	while (i < p->n_ph)
+	{
+		printf("philo[%d] ate %d times\n", i + 1, p->arr_ph[i].has_eatn);
+		i++;
+	}
+}
+*/
+
 void	monitor(t_prime *p)
 {
 	while (1)
 	{
-		wait_for(1000);
+		usleep(1000);
 		if (is_dead(p) == 1)
+			break ;
+		if (p->n_mls_m_eat != 0 && is_fed(p) == 1)
 			break ;
 	}
 	return ;

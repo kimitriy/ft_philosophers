@@ -6,7 +6,7 @@
 #    By: rburton <rburton@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/28 11:32:38 by rburton           #+#    #+#              #
-#    Updated: 2021/06/30 04:11:17 by rburton          ###   ########.fr        #
+#    Updated: 2021/07/06 00:38:25 by rburton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,19 @@ HEADER		= ft_philosophers.h
 
 SRC 		= 	main.c \
 				prsr.c \
-				utils.c \
-				pthreads.c \
+				pthreads1.c \
+				pthreads2.c \
 				monitor.c \
+				utils1.c \
+				utils2.c \
 
 OBJS		= ${SRC:.c=.o}
 
 GCC			= gcc
 
-CFLAGS		= -g -pthread -Wall -Wextra -Werror
+# CFLAGS		= -g -pthread -Wall -Wextra -Werror
+# CFLAGS		= -g -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror
 
 RM			= rm -f
 

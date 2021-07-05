@@ -1,5 +1,7 @@
 #include "ft_philosophers.h"
 
+/*returns 0 if char is not a digit
+thus returns 1 if the str is a number and 0 if it is not*/
 int	is_a_number(char *str)
 {
 	int		i;
@@ -8,13 +10,13 @@ int	is_a_number(char *str)
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
-			return (err_message("Wrong argument!")); //returns 0 if char is not a digit
+			return (err_message("Wrong argument!"));
 		i++;
 	}
-	return (1); //thus returns 1 if the str is a number and 0 if it is not
+	return (1);
 }
 
-int	prs_argv(int argc, char **argv, t_prime *p) 
+int	prs_argv(int argc, char **argv, t_prime *p)
 {
 	if (is_a_number(argv[1]))
 		p->n_ph = ft_atoi(argv[1]);
@@ -49,7 +51,8 @@ int	prsr(int argc, char **argv, t_prime *p)
 		return (0);
 	if (p->n_ph > 2000 || p->n_ph < 1)
 		return (err_message("Wrong number of philosophers!"));
-	if (p->t2d < 60 || p->t2e < 60 || p->t2s < 60)
-		return (err_message("Wrong time_to_die / time_to_eat / time_to_sleep!"));
+	if (p->t2d < 60000 || p->t2e < 60000 || p->t2s < 60000)
+		return (err_message("Wrong time_to_die / \
+			time_to_eat / time_to_sleep!"));
 	return (1);
 }
