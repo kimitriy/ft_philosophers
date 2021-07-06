@@ -71,6 +71,7 @@ void					release_frks(t_phlsphr *ph);
 void					*ph_lives(void *ph);
 
 /*pthreads2.c*/
+void					pthread_start(t_prime *p, int i);
 void					launch_threads(t_prime *p);
 
 /*monitor.c*/
