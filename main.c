@@ -29,6 +29,7 @@ void	ph_init(t_prime *p, int ix)
 		p->arr_ph[ix].rfrk = &p->arr_frk[0];
 	else
 		p->arr_ph[ix].rfrk = &p->arr_frk[ix + 1];
+	p->arr_ph[ix].has_eatn = 0;
 }
 
 void	arr_ph_init(t_prime *p)
@@ -44,6 +45,22 @@ void	arr_ph_init(t_prime *p)
 	}
 }
 
+void	free_p(t_prime *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->n_ph)
+	{
+		pthread_mutex_destroy(&p->arr_frk[i]);
+		i++;
+	}
+	free(p->arr_frk);
+	free(p->arr_ph);
+	free(p->ph_ptid);
+	free(p);
+}
+
 int	main(int argc, char **argv)
 {
 	t_prime	*p;
@@ -55,6 +72,7 @@ int	main(int argc, char **argv)
 		arr_ph_init(p);
 		launch_threads(p);
 		monitor(p);
+		free_p(p);
 	}
 	return (0);
 }

@@ -19,7 +19,7 @@ int	is_dead(t_prime *p)
 	i = 0;
 	while (i < p->n_ph)
 	{
-		if ((current_time() - p->arr_ph[i].t_lst_ml) \
+		if ((current_time() - p->arr_ph[i].t_lst_ml)
 			* 1000 > (unsigned long)p->t2d)
 		{
 			prnt_sts(&p->arr_ph[i], "died of hunger");
@@ -33,19 +33,22 @@ int	is_dead(t_prime *p)
 
 int	is_fed(t_prime *p)
 {
-	int	n_ph_fed;
 	int	i;
+	int	j;
 
-	n_ph_fed = 0;
 	i = 0;
+	j = 0;
 	while (i < p->n_ph)
 	{
 		if (p->arr_ph[i].has_eatn >= p->n_mls_m_eat)
-			n_ph_fed++;
+			j++;
 		i++;
 	}
-	if (n_ph_fed == p->n_ph)
+	if (j == p->n_ph)
+	{
+		kill_ph(p);
 		return (1);
+	}	
 	else
 		return (0);
 }
